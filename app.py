@@ -5,7 +5,7 @@ import os
 
 # Store your API_ID in a configuration variable
 API_CONFIG = {
-    "API_ID": "4a9509426cc64f2884122be3e6802bf4",  # Replace with your Open Exchange Rates API ID
+    "API_ID": "4a9509426cc64f2884122be3e6802bf4",
     "API_URL": "https://openexchangerates.org/api"
 }
 

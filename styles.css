@@ -1,16 +1,10 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
-    text-align: center;
-    padding: 50px;
 }
 
 .container {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    display: inline-block;
+    max-width: 500px;
 }
 
 h1 {
@@ -18,9 +12,10 @@ h1 {
 }
 
 form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    background: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 input, select, button {
@@ -34,7 +29,6 @@ button {
     background-color: #007bff;
     color: white;
     border: none;
-    cursor: pointer;
 }
 
 button:hover {
@@ -42,7 +36,17 @@ button:hover {
 }
 
 #result {
-    margin-top: 20px;
     font-size: 18px;
     font-weight: bold;
+    color: #333;
+}
+
+.alert-success {
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #28a745;
+    color: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
 }

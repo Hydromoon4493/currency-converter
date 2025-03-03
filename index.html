@@ -1,68 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Currency Converter</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Currency Converter</title>
+  <!-- Add Bootstrap CDN for styling -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>💱 Currency Converter</h1>
-        <form id="converter-form">
-            <label for="amount">Amount:</label>
-            <input type="number" id="amount" required>
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">💱 Currency Converter</h1>
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <form id="converter-form" class="bg-light p-4 rounded shadow-sm">
+          <div class="mb-3">
+            <label for="amount" class="form-label">Amount:</label>
+            <input type="number" id="amount" class="form-control" required>
+          </div>
 
-            <select id="from_currency">
-                <option value="USD">United States Dollar (USD)</option>
-                <option value="EUR">Euro (EUR)</option>
-                <option value="JPY">Japanese Yen (JPY)</option>
+          <div class="mb-3">
+            <label for="from_currency" class="form-label">From Currency:</label>
+            <select id="from_currency" class="form-select">
+              <!-- Options will be populated by JavaScript -->
             </select>
-            
-            <select id="to_currency">
-                <option value="USD">United States Dollar (USD)</option>
-                <option value="EUR">Euro (EUR)</option>
-                <option value="JPY">Japanese Yen (JPY)</option>
+          </div>
+
+          <div class="mb-3">
+            <label for="to_currency" class="form-label">To Currency:</label>
+            <select id="to_currency" class="form-select">
+              <!-- Options will be populated by JavaScript -->
             </select>
-            
-            <button type="submit">Convert</button>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100">Convert</button>
         </form>
-        <div id="result"></div>
+
+        <!-- Converted Amount Box -->
+        <div id="result" class="mt-3 text-center"></div>
+      </div>
     </div>
+  </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch("/currencies")
-                .then(response => response.json())
-                .then(data => {
-                    const fromCurrency = document.getElementById("from_currency");
-                    const toCurrency = document.getElementById("to_currency");
+  <!-- Add Bootstrap JS and Popper.js for Bootstrap functionality -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Allowed currencies array (only these will be displayed)
+      const allowedCurrencies = ['USD', 'EUR', 'JPY'];
 
-                    Object.keys(data).forEach(currency => {
-                        let option1 = new Option(currency, currency);
-                        let option2 = new Option(currency, currency);
-                        fromCurrency.add(option1);
-                        toCurrency.add(option2);
-                    });
-                });
+      // Currency names mapping (to display full names)
+      const currencyNames = {
+          'USD': 'United States Dollar (USD)',
+          'EUR': 'Euro (EUR)',
+          'JPY': 'Japanese Yen (JPY)'
+      };
 
-            document.getElementById("converter-form").addEventListener("submit", function(event) {
-                event.preventDefault();
-                const amount = document.getElementById("amount").value;
-                const from = document.getElementById("from_currency").value;
-                const to = document.getElementById("to_currency").value;
+      fetch("/currencies")
+        .then(response => response.json())
+        .then(data => {
+          const fromCurrency = document.getElementById("from_currency");
+          const toCurrency = document.getElementById("to_currency");
 
-                fetch("/convert", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ amount, from_currency: from, to_currency: to })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("result").innerHTML = `Converted Amount: ${data.converted_amount} ${to}`;
-                });
-            });
+          // Populate dropdowns only with allowed currencies using full names
+          Object.keys(data).forEach(currency => {
+            if (allowedCurrencies.includes(currency)) {
+              let displayName = currencyNames[currency] || currency;
+              let option1 = new Option(displayName, currency);
+              let option2 = new Option(displayName, currency);
+              fromCurrency.add(option1);
+              toCurrency.add(option2);
+            }
+          });
+        })
+        .catch(error => {
+          console.error("Error fetching currencies:", error);
         });
-    </script>
+
+      document.getElementById("converter-form").addEventListener("submit", function(event) {
+        event.preventDefault();
+        const amount = document.getElementById("amount").value;
+        const from = document.getElementById("from_currency").value;
+        const to = document.getElementById("to_currency").value;
+
+        fetch("/convert", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount, from_currency: from, to_currency: to })
+        })
+        .then(response => response.json())
+        .then(data => {
+          // Check if the conversion succeeded and format the result safely
+          if(data.converted_amount === undefined) {
+            document.getElementById("result").innerHTML = `<div class="alert alert-danger">Error: Conversion failed.</div>`;
+          } else {
+            const convertedAmount = formatCurrency(data.converted_amount);
+            const displayTo = currencyNames[to] || to; // use fallback if missing
+            document.getElementById("result").innerHTML = `
+              <div class="alert alert-success">
+                <strong>Converted Amount:</strong> ${convertedAmount} ${displayTo}
+              </div>
+            `;
+          }
+        })
+        .catch(error => {
+          console.error("Error converting currency:", error);
+          document.getElementById("result").innerHTML = `<div class="alert alert-danger">Error: Conversion failed.</div>`;
+        });
+      });
+    });
+
+    // Function to format the number with commas
+    function formatCurrency(amount) {
+      return Number(amount).toLocaleString();
+    }
+  </script>
 </body>
 </html>
