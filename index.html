@@ -48,14 +48,25 @@
   
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      // Allowed currencies array (only these will be displayed)
-      const allowedCurrencies = ['USD', 'EUR', 'JPY'];
+      // Allowed currencies array (add Bells to the list)
+      const allowedCurrencies = ['USD', 'EUR', 'JPY', 'Bells', 'GCS', 'Imperial Credits', 'Galleons', 'Dracma', 'GBP', 'AUD', 'CAD', 'CHF', 'NZD', 'KRW'];
 
-      // Currency names mapping (to display full names)
+      // Currency names mapping
       const currencyNames = {
           'USD': 'United States Dollar (USD)',
           'EUR': 'Euro (EUR)',
-          'JPY': 'Japanese Yen (JPY)'
+          'JPY': 'Japanese Yen (JPY)',
+          'Bells': 'Animal Crossing Bells (Bells)',
+          'GCS': 'Galactic Credit Standard (Star Wars)',
+          'Imperial Credits': 'Imperial Credits (Star Wars)',
+          'Galleons': 'Galleons (Harry Potter)',
+          'Dracma': 'Dracma (Greek Mythology)',
+          'GBP': 'British Pound Sterling (GBP)',
+          'AUD': 'Australian Dollar (AUD)',
+          'CAD': 'Canadian Dollar (CAD)',
+          'CHF': 'Swiss Franc (CHF)',
+          'NZD': 'New Zealand Dollar (NZD)',
+          'KRW': 'South Korean Won (KRW)',
       };
 
       fetch("/currencies")
