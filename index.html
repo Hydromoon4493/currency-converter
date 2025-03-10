@@ -49,7 +49,7 @@
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       // Allowed currencies array (add Bells to the list)
-      const allowedCurrencies = ['USD', 'EUR', 'JPY', 'Bells', 'GCS', 'Imperial Credits', 'Galleons', 'Dracma', 'GBP', 'AUD', 'CAD', 'CHF', 'NZD', 'KRW'];
+      const allowedCurrencies = ['USD', 'EUR', 'JPY', 'Bells', 'GCS', 'Imperial Credits', 'Galleons', 'Dracma', 'GBP', 'AUD', 'CAD', 'CHF', 'NZD', 'KRW', 'ZWL'];
 
       // Currency names mapping
       const currencyNames = {
@@ -67,6 +67,7 @@
           'CHF': 'Swiss Franc (CHF)',
           'NZD': 'New Zealand Dollar (NZD)',
           'KRW': 'South Korean Won (KRW)',
+          'ZWL': 'Zimbabwean Dollar (ZWL)',
       };
 
       fetch("/currencies")
