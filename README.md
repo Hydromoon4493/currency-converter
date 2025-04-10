@@ -18,7 +18,31 @@ A currency converter application that allows users to convert between different 
    git clone https://github.com/Hydromoon4493/currency-converter
    cd currency-converter
    ```
-2. Install required dependencies:
+
+2. Make sure Python is installed
+
+   Check if Python is already installed:
+   ```sh
+   python --version
+   ```
+   Or if your system uses python3
+   ```sh
+   python3 --version
+   ```
+
+3. (Optional but recommended) Create and activate a virtual environment:
+   On Windows:
+   ```sh
+   python -m venv venv
+   venv\Scripts\activate
+   ```
+   On macOS/Linux:
+   ```sh
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+
+4. Install required dependencies:
    ```sh
    pip install -r requirements.txt
    ```
